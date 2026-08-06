@@ -1,0 +1,63 @@
+# --- CMake / Ninja (matches CMakePresets.json binaryDir) ---
+cmake-build-*/
+build/
+out/
+
+# CMake generated files (when configuring outside preset dirs)
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.xml
+install_manifest.txt
+Makefile
+.ninja_deps
+.ninja_log
+
+# Local overrides (machine-specific SPARK_ROOT, etc.)
+CMakeUserPresets.json
+
+# Clangd / tooling (prefer compile_commands.json inside ignored build trees)
+compile_commands.json
+
+# --- CLion / IntelliJ IDEA ---
+.idea/workspace.xml
+.idea/httpRequests/
+.idea/dataSources/
+.idea/dataSources.local.xml
+.idea/shelf/
+
+# --- VS Code (optional local editor settings) ---
+.vscode/
+
+# --- Build outputs ---
+SparkArpg
+*.exe
+*.dll
+*.dylib
+*.so
+*.a
+*.lib
+*.o
+*.obj
+*.pch
+
+# Spark engine copy beside executable (post-build)
+spark_engine/
+
+# --- OS ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Logs / test artifacts ---
+*.log
+Testing/
+
+# --- Coverage ---
+*.gcda
+*.gcno
+*.gcov
+*.profdata
+
+# Keep game assets tracked (Kenney glTF, textures, .bin buffers).
+# Do not add assets/ here.

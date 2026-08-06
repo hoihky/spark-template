@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Spark ARPG game project (see arpg/.gitignore for CMake / CLion details)
+arpg/cmake-build-*/
+arpg/build/
+arpg/out/
