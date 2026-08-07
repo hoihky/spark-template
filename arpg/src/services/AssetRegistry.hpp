@@ -28,9 +28,9 @@ public:
 private:
     void ApplySharedPropTexture(Spark::GltfAsset& asset) const;
 
-    Spark::SharedPtr<Spark::Texture2D> dungeonAtlas_;
-    Spark::HashMap<Spark::Utf8String, Spark::GltfAsset, Spark::Detail::Utf8StringHasher> propCache_;
-    Spark::HashMap<Spark::Utf8String, Spark::SkinnedGltfAsset, Spark::Detail::Utf8StringHasher> skinnedCache_;
+    Spark::SharedPtr<Spark::Texture2D> dungeonAtlas;
+    Spark::HashMap<Spark::Utf8String, Spark::GltfAsset, Spark::Detail::Utf8StringHasher> propCache;
+    Spark::HashMap<Spark::Utf8String, Spark::SkinnedGltfAsset, Spark::Detail::Utf8StringHasher> skinnedCache;
 };
 
 }  // namespace Arpg

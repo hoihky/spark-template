@@ -16,7 +16,7 @@ public:
     void Render(GameContext& ctx);
 
 private:
-    Spark::UniquePtr<IGameState> active_;
+    Spark::UniquePtr<IGameState> active;
 };
 
 }  // namespace Arpg

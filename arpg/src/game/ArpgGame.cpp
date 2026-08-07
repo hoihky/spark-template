@@ -5,26 +5,26 @@
 
 namespace Arpg {
 
-void ArpgGame::OnAttach(Spark::IEngineContext& context) {
-    context_.world = &GetWorld();
-    context_.engine = &context;
+void ArpgGame::OnAttach(Spark::IEngineContext& ctx) {
+    context.world = &GetWorld();
+    context.engine = &ctx;
     Spark::UniquePtr<IGameState> playState(Spark::MakeUnique<PlayState>().Release());
-    stateMachine_.ChangeState(Spark::MoveTemp(playState), context_);
+    stateMachine.ChangeState(Spark::MoveTemp(playState), context);
 }
 
 void ArpgGame::OnDetach() {
-    stateMachine_.ChangeState(Spark::UniquePtr<IGameState>{}, context_);
-    context_.world = nullptr;
-    context_.engine = nullptr;
+    stateMachine.ChangeState(Spark::UniquePtr<IGameState>{}, context);
+    context.world = nullptr;
+    context.engine = nullptr;
 }
 
-void ArpgGame::OnUpdate(const Spark::FrameTiming& timing, Spark::IEngineContext& context) {
-    stateMachine_.Update(context_, timing);
-    Spark::ProcessSoundCues(GetWorld(), context);
+void ArpgGame::OnUpdate(const Spark::FrameTiming& timing, Spark::IEngineContext& ctx) {
+    stateMachine.Update(context, timing);
+    Spark::ProcessSoundCues(GetWorld(), ctx);
 }
 
 void ArpgGame::OnRender(Spark::IRenderFrame& /*frame*/, Spark::IEngineContext& /*context*/) {
-    stateMachine_.Render(context_);
+    stateMachine.Render(context);
 }
 
 }  // namespace Arpg

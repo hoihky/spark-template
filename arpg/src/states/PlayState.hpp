@@ -18,10 +18,10 @@ public:
 private:
     void UpdateHud(const Spark::FrameTiming& timing);
 
-    Spark::Array<Spark::GameObject*> levelRoots_{};
-    PlayerAvatarResult player_{};
-    PlayerController playerController_{};
-    float fpsSmoothed_ = 0.0F;
+    Spark::Array<Spark::GameObject*> levelRoots{};
+    PlayerAvatarResult player{};
+    PlayerController playerController{};
+    float fpsSmoothed = 0.0F;
 };
 
 }  // namespace Arpg

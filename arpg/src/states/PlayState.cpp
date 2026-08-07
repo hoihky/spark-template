@@ -21,52 +21,52 @@ void PlayState::OnEnter(GameContext& ctx) {
     DungeonLevelBuilder levelBuilder;
     const DungeonBuildResult level = levelBuilder.Build(ctx);
     for (std::size_t i = 0; i < level.roots.GetSize(); ++i) {
-        levelRoots_.PushBack(level.roots[i]);
+        levelRoots.PushBack(level.roots[i]);
     }
 
     PlayerAvatar avatarFactory;
-    player_ = avatarFactory.Spawn(ctx, levelRoots_, level.playerSpawn);
+    player = avatarFactory.Spawn(ctx, levelRoots, level.playerSpawn);
 
     glfwSetWindowTitle(ctx.engine->GetWindow().Handle(), "Spark ARPG template");
 }
 
 void PlayState::OnExit(GameContext& ctx) {
     PlayerAvatar avatarFactory;
-    avatarFactory.Destroy(ctx, player_, levelRoots_);
+    avatarFactory.Destroy(ctx, player, levelRoots);
 
     Spark::GameWorld& world = *ctx.world;
-    for (std::size_t i = 0; i < levelRoots_.GetSize(); ++i) {
-        if (levelRoots_[i] != nullptr) {
-            world.DestroyGameObject(levelRoots_[i]);
+    for (std::size_t i = 0; i < levelRoots.GetSize(); ++i) {
+        if (levelRoots[i] != nullptr) {
+            world.DestroyGameObject(levelRoots[i]);
         }
     }
-    levelRoots_.Clear();
+    levelRoots.Clear();
 }
 
 void PlayState::UpdateHud(const Spark::FrameTiming& timing) {
-    if (player_.hudText == nullptr) {
+    if (player.hudText == nullptr) {
         return;
     }
     const float dt = timing.deltaTimeSeconds;
     const float instant = (dt > 1.0e-6F) ? (1.0F / dt) : 0.0F;
     if (timing.frameIndex < 2U) {
-        fpsSmoothed_ = instant;
+        fpsSmoothed = instant;
     } else {
-        fpsSmoothed_ = fpsSmoothed_ * 0.88F + instant * 0.12F;
+        fpsSmoothed = fpsSmoothed * 0.88F + instant * 0.12F;
     }
 
-    const char* heroLabel = player_.heroLabel.IsEmpty() ? "hero" : player_.heroLabel.CStr();
-    player_.hudText->SetText(Spark::Utf8String(
+    const char* heroLabel = player.heroLabel.IsEmpty() ? "hero" : player.heroLabel.CStr();
+    player.hudText->SetText(Spark::Utf8String(
             std::format(
                     "ARPG — {:.0f} FPS — 3rd person · {} — WASD · Shift run · F attack · F1 mouse · ESC quit",
-                    static_cast<double>(fpsSmoothed_),
+                    static_cast<double>(fpsSmoothed),
                     heroLabel)
                     .c_str()));
 }
 
 void PlayState::OnUpdate(GameContext& ctx, const Spark::FrameTiming& timing) {
     ctx.sceneTimeSeconds = timing.totalTimeSeconds;
-    playerController_.Update(player_, ctx, timing);
+    playerController.Update(player, ctx, timing);
     UpdateHud(timing);
     ctx.world->UpdateGameObjects(timing, *ctx.engine);
 }
@@ -80,15 +80,15 @@ void PlayState::OnRender(GameContext& ctx) {
 
     const Spark::Matrix4 proj =
             Spark::Matrix4::PerspectiveVulkan(Spark::DegreesToRadians(70.0F), aspect, 0.1F, 200.0F);
-    const Spark::Matrix4 view = player_.rig.ViewMatrix();
+    const Spark::Matrix4 view = player.rig.ViewMatrix();
     const Spark::Matrix4 viewProj = proj * view;
-    const Spark::Vector3 camPos = player_.rig.CameraWorldPosition();
+    const Spark::Vector3 camPos = player.rig.CameraWorldPosition();
 
-    Spark::Vector3 pr = Spark::Vector3::Cross(Spark::Vector3{0.0F, 1.0F, 0.0F}, player_.rig.ForwardWorld()).Normalized();
+    Spark::Vector3 pr = Spark::Vector3::Cross(Spark::Vector3{0.0F, 1.0F, 0.0F}, player.rig.ForwardWorld()).Normalized();
     if (pr.LengthSquared() < 1.0e-8F) {
-        pr = Spark::Vector3::Cross(Spark::Vector3{1.0F, 0.0F, 0.0F}, player_.rig.ForwardWorld()).Normalized();
+        pr = Spark::Vector3::Cross(Spark::Vector3{1.0F, 0.0F, 0.0F}, player.rig.ForwardWorld()).Normalized();
     }
-    const Spark::Vector3 pu = Spark::Vector3::Cross(player_.rig.ForwardWorld(), pr).Normalized();
+    const Spark::Vector3 pu = Spark::Vector3::Cross(player.rig.ForwardWorld(), pr).Normalized();
 
     Spark::SubmitStandardLitSceneFromWorld(
             *ctx.world,

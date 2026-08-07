@@ -93,16 +93,16 @@ namespace {
 }  // namespace
 
 AssetPaths::AssetPaths() {
-    gameAssetsRoot_ = ResolveGameAssetsRoot();
+    gameAssetsRoot = ResolveGameAssetsRoot();
 
-    sparkAssetsRoot_ = Spark::Utf8String("../../spark/assets");
-    if (!DirectoryExists(std::filesystem::path(sparkAssetsRoot_.CStr()))) {
-        sparkAssetsRoot_ = Spark::Utf8String("../spark/assets");
+    sparkAssetsRoot = Spark::Utf8String("../../spark/assets");
+    if (!DirectoryExists(std::filesystem::path(sparkAssetsRoot.CStr()))) {
+        sparkAssetsRoot = Spark::Utf8String("../spark/assets");
     }
 }
 
 Spark::Utf8String AssetPaths::ModelPath(const char* fileName) const {
-    Spark::Utf8String out(gameAssetsRoot_);
+    Spark::Utf8String out(gameAssetsRoot);
     out.AppendUtf8("/models/");
     out.AppendUtf8(fileName);
     return out;
@@ -115,7 +115,7 @@ Spark::Utf8String AssetPaths::SparkEngineModelPath(const char* fileName) const {
     if (std::filesystem::exists(std::filesystem::path(out.CStr()))) {
         return out;
     }
-    Spark::Utf8String fallback(sparkAssetsRoot_);
+    Spark::Utf8String fallback(sparkAssetsRoot);
     fallback.AppendUtf8("/models/");
     fallback.AppendUtf8(fileName);
     return fallback;

@@ -12,7 +12,7 @@ class AssetPaths {
 public:
     AssetPaths();
 
-    [[nodiscard]] const Spark::Utf8String& GetGameAssetsRoot() const noexcept { return gameAssetsRoot_; }
+    [[nodiscard]] const Spark::Utf8String& GetGameAssetsRoot() const noexcept { return gameAssetsRoot; }
 
     /** e.g. "floor_tile_large.gltf" → absolute or relative path under game assets/models/. */
     [[nodiscard]] Spark::Utf8String ModelPath(const char* fileName) const;
@@ -21,8 +21,8 @@ public:
     [[nodiscard]] Spark::Utf8String SparkEngineModelPath(const char* fileName) const;
 
 private:
-    Spark::Utf8String gameAssetsRoot_;
-    Spark::Utf8String sparkAssetsRoot_;
+    Spark::Utf8String gameAssetsRoot;
+    Spark::Utf8String sparkAssetsRoot;
 };
 
 }  // namespace Arpg

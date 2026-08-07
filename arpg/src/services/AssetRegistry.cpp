@@ -13,7 +13,7 @@ constexpr const char* kDungeonAtlasKey = "arpg/dungeon_atlas";
 }  // namespace
 
 void AssetRegistry::PrimeSharedTextures(Spark::GameWorld& world, const AssetPaths& paths) {
-    if (dungeonAtlas_) {
+    if (dungeonAtlas) {
         return;
     }
     const Spark::Utf8String atlasPath = paths.ModelPath("dungeon_texture.png");
@@ -27,37 +27,37 @@ void AssetRegistry::PrimeSharedTextures(Spark::GameWorld& world, const AssetPath
     if (tex) {
         tex->GetName() = Spark::Utf8String("DungeonAtlas");
         world.RegisterTexture(tex, kDungeonAtlasKey);
-        dungeonAtlas_ = tex;
+        dungeonAtlas = tex;
     }
 }
 
 void AssetRegistry::ApplySharedPropTexture(Spark::GltfAsset& asset) const {
-    if (dungeonAtlas_ && asset.baseColorTexture) {
-        asset.baseColorTexture = dungeonAtlas_;
+    if (dungeonAtlas && asset.baseColorTexture) {
+        asset.baseColorTexture = dungeonAtlas;
     }
 }
 
 Spark::GltfAsset AssetRegistry::LoadProp(Spark::GameWorld& world, const Spark::Utf8String& path) {
-    if (Spark::GltfAsset* found = propCache_.Find(path)) {
+    if (Spark::GltfAsset* found = propCache.Find(path)) {
         Spark::GltfAsset asset = *found;
         ApplySharedPropTexture(asset);
         return asset;
     }
     Spark::GltfAsset asset = world.LoadGltf(path.CStr());
     ApplySharedPropTexture(asset);
-    propCache_.Add(path, asset);
+    propCache.Add(path, asset);
     return asset;
 }
 
 Spark::SkinnedGltfAsset AssetRegistry::LoadSkinnedAvatar(Spark::GameWorld& world, const Spark::Utf8String& path) {
-    if (Spark::SkinnedGltfAsset* found = skinnedCache_.Find(path)) {
+    if (Spark::SkinnedGltfAsset* found = skinnedCache.Find(path)) {
         return *found;
     }
     Spark::SkinnedGltfAsset asset = world.LoadSkinnedGltf(path.CStr());
     if (asset.baseColorTexture) {
         world.RegisterTexture(asset.baseColorTexture, path.CStr());
     }
-    skinnedCache_.Add(path, asset);
+    skinnedCache.Add(path, asset);
     return asset;
 }
 

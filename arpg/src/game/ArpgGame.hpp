@@ -18,8 +18,8 @@ public:
     void OnRender(Spark::IRenderFrame& frame, Spark::IEngineContext& context) override;
 
 private:
-    GameContext context_;
-    GameStateMachine stateMachine_;
+    GameContext context;
+    GameStateMachine stateMachine;
 };
 
 }  // namespace Arpg
