@@ -13,6 +13,8 @@ namespace Arpg {
 struct DungeonBuildResult {
     Spark::Array<Spark::GameObject*> roots;
     Spark::Vector3 playerSpawn{0.0F, 0.0F, 0.0F};
+    /** Sky sphere root — center follows the camera each frame in PlayState. */
+    Spark::GameObject* skyRoot = nullptr;
 };
 
 /**
@@ -50,6 +52,22 @@ private:
             GameContext& ctx,
             Spark::Array<Spark::GameObject*>& roots,
             const Spark::Vector3& center);
+
+    void SpawnSkybox(GameContext& ctx, Spark::Array<Spark::GameObject*>& roots, DungeonBuildResult& result);
+
+    void SpawnSceneLights(
+            GameContext& ctx,
+            Spark::Array<Spark::GameObject*>& roots,
+            const Spark::Vector3& center);
+
+    Spark::GameObject* SpawnPointLight(
+            GameContext& ctx,
+            Spark::Array<Spark::GameObject*>& roots,
+            const Spark::Vector3& position,
+            const Spark::Vector3& color,
+            float intensity,
+            float range,
+            const char* debugName);
 };
 
 }  // namespace Arpg

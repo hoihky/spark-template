@@ -15,7 +15,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "SPARK_ROOT": "${sourceDir}/../../spark",
-        "SPARK_BUILD_SCRIPT_HOST": "OFF"
+        "SPARK_BUILD_INTEROP": "OFF"
       }
     },
     {
@@ -27,7 +27,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "SPARK_ROOT": "${sourceDir}/../../spark",
-        "SPARK_BUILD_SCRIPT_HOST": "OFF"
+        "SPARK_BUILD_INTEROP": "OFF"
       }
     }
   ],

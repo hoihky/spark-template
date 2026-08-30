@@ -1,7 +1,7 @@
 #include "player/PlayerAvatar.hpp"
 
 #include "spark/ecs/GameObject.hpp"
-#include "spark/scene/GameWorld.hpp"
+#include "spark/scene/core/GameWorld.hpp"
 
 #include "spark/ecs/components/animation/AnimatorComponent.hpp"
 #include "spark/ecs/components/animation/Character3DAnimFsmComponent.hpp"
@@ -11,6 +11,7 @@
 #include "spark/ecs/components/rendering/SkinnedMeshComponent.hpp"
 #include "spark/ecs/components/rendering/TextOverlayComponent.hpp"
 #include "spark/math/Constants.hpp"
+#include "spark/scene/material/GltfMaterial.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -135,9 +136,9 @@ PlayerAvatarResult PlayerAvatar::Spawn(
         vtr->SetRotation(Spark::Quaternion::Identity);
 
         visual->AddComponent<Spark::SkinnedMeshComponent>(avatar.mesh);
-        if (avatar.baseColorTexture) {
-            if (Spark::MaterialComponent* mat =
-                        visual->AddComponent<Spark::MaterialComponent>(avatar.baseColorTexture, Spark::Vector3::One)) {
+        if (avatar.material.HasAnyTexture() || avatar.baseColorTexture) {
+            if (Spark::MaterialComponent* mat = visual->AddComponent<Spark::MaterialComponent>()) {
+                Spark::ApplyGltfMaterialDesc(*mat, avatar.material);
                 mat->SetMetallic(0.05F);
                 mat->SetRoughness(0.65F);
             }

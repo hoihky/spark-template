@@ -5,8 +5,6 @@
 #include <filesystem>
 #include <vector>
 
-#include <cstdint>
-
 #if defined(_WIN32)
 #include <windows.h>
 #elif defined(__APPLE__)
@@ -17,6 +15,8 @@
 #include <climits>
 #include <unistd.h>
 #endif
+
+#include <cstdint>
 
 namespace Arpg {
 
@@ -71,9 +71,6 @@ namespace {
     std::vector<std::filesystem::path> candidates;
     candidates.push_back(ExecutableDirectory() / "assets");
     candidates.push_back(std::filesystem::path("assets"));
-#ifdef ARPG_ASSETS_ROOT
-    candidates.push_back(std::filesystem::path(ARPG_ASSETS_ROOT));
-#endif
 
     for (const std::filesystem::path& candidate : candidates) {
         if (HasCompleteDungeonMeshes(candidate)) {

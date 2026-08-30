@@ -4,10 +4,11 @@
 #include "world/DungeonLevelBuilder.hpp"
 #include "spark/engine/IEngineContext.hpp"
 #include "spark/engine/IInput.hpp"
+#include "spark/ecs/components/core/TransformComponent.hpp"
 #include "spark/ecs/components/rendering/TextOverlayComponent.hpp"
 #include "spark/render/platform/Window.hpp"
-#include "spark/scene/SceneSubmit.hpp"
-#include "spark/scene/GameWorld.hpp"
+#include "spark/scene/submit/SceneSubmit.hpp"
+#include "spark/scene/core/GameWorld.hpp"
 
 #include <GLFW/glfw3.h>
 #include <format>
@@ -26,6 +27,7 @@ void PlayState::OnEnter(GameContext& ctx) {
 
     PlayerAvatar avatarFactory;
     player = avatarFactory.Spawn(ctx, levelRoots, level.playerSpawn);
+    skyRoot_ = level.skyRoot;
 
     glfwSetWindowTitle(ctx.engine->GetWindow().Handle(), "Spark ARPG template");
 }
@@ -41,6 +43,7 @@ void PlayState::OnExit(GameContext& ctx) {
         }
     }
     levelRoots.Clear();
+    skyRoot_ = nullptr;
 }
 
 void PlayState::UpdateHud(const Spark::FrameTiming& timing) {
@@ -67,6 +70,14 @@ void PlayState::UpdateHud(const Spark::FrameTiming& timing) {
 void PlayState::OnUpdate(GameContext& ctx, const Spark::FrameTiming& timing) {
     ctx.sceneTimeSeconds = timing.totalTimeSeconds;
     playerController.Update(player, ctx, timing);
+
+    if (skyRoot_ != nullptr) {
+        if (Spark::TransformComponent* skyTr = skyRoot_->GetComponent<Spark::TransformComponent>()) {
+            skyTr->SetTranslation(player.rig.CameraWorldPosition());
+            skyTr->SetUniformScale(72.0F);
+        }
+    }
+
     UpdateHud(timing);
     ctx.world->UpdateGameObjects(timing, *ctx.engine);
 }
@@ -97,8 +108,8 @@ void PlayState::OnRender(GameContext& ctx) {
             camPos,
             Spark::Vector3{0.35F, 0.82F, 0.28F}.Normalized(),
             Spark::Vector3{1.0F, 0.96F, 0.90F},
-            1.1F,
-            Spark::Vector3{0.12F, 0.13F, 0.16F},
+            1.05F,
+            Spark::Vector3{0.18F, 0.20F, 0.26F},
             false,
             pr,
             pu,

@@ -3,7 +3,7 @@
 #include "spark/core/HashMap.hpp"
 #include "spark/core/Utf8String.hpp"
 #include "spark/memory/SharedPtr.hpp"
-#include "spark/scene/GameWorldAssetCache.hpp"
+#include "spark/scene/assets/GameWorldAssetCache.hpp"
 
 namespace Spark {
 class GameWorld;
@@ -28,9 +28,9 @@ public:
 private:
     void ApplySharedPropTexture(Spark::GltfAsset& asset) const;
 
-    Spark::SharedPtr<Spark::Texture2D> dungeonAtlas;
-    Spark::HashMap<Spark::Utf8String, Spark::GltfAsset, Spark::Detail::Utf8StringHasher> propCache;
-    Spark::HashMap<Spark::Utf8String, Spark::SkinnedGltfAsset, Spark::Detail::Utf8StringHasher> skinnedCache;
+    Spark::SharedPtr<Spark::Texture2D> dungeonAtlas_;
+    Spark::HashMap<Spark::Utf8String, Spark::GltfAsset, Spark::Detail::Utf8StringHasher> propCache_;
+    Spark::HashMap<Spark::Utf8String, Spark::SkinnedGltfAsset, Spark::Detail::Utf8StringHasher> skinnedCache_;
 };
 
 }  // namespace Arpg

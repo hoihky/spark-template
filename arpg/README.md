@@ -29,17 +29,20 @@ arpg/
 
 Requires **CMake 3.28+**, **C++23**, and the **Vulkan SDK** (`glslangValidator` on `PATH` when Spark is first configured).
 
-`SPARK_BUILD_SCRIPT_HOST=OFF` is set in CMake because Spark’s scripting module resolves paths via the top-level `CMAKE_SOURCE_DIR` (this game project), not `SPARK_ROOT`. C# scripting is not needed for the ARPG template.
+CMake sets `SPARK_BUILD_DEMO=OFF` and `SPARK_BUILD_INTEROP=OFF` so only `SparkArpg` and shared `SparkEngine` are built. `SPARK_BUILD_ENGINE_DEMOS=ON` is required because current Spark links demo shell symbols into `SparkEngine`.
+
+Game assets are resolved at runtime from `<executable>/assets` (copied on each build). No compile-time absolute asset paths.
 
 ## Configure manually
 
 ```bash
-cmake -S . -B cmake-build-debug \
-  -DSPARK_ROOT=/absolute/path/to/spark
+cmake -S . -B cmake-build-debug -DSPARK_ROOT=../../spark
 cmake --build cmake-build-debug
 ```
 
-Assets are copied to `cmake-build-debug/assets` beside the executable on each build.
+If Spark is not a sibling of `spark-template`, set `SPARK_ROOT` to a **relative or absolute** path to your engine clone.
+
+Assets are copied beside the executable on each build (`cmake-build-debug/assets` when using the default preset).
 
 ## Controls
 
@@ -61,7 +64,7 @@ Assets are copied to `cmake-build-debug/assets` beside the executable on each bu
 | **Registry / cache** | `AssetRegistry` | Avoid reloading glTF; stable keys for GPU assets |
 | **Composition (ECS)** | Spark `GameObject` + components | Gameplay as components, not inheritance trees |
 
-Spark may release new versions over time. This project depends only on **public Spark headers** (`spark/engine`, `spark/scene`, `spark/ecs`, etc.) and `SPARK_ROOT` — not engine internals. See `DEVELOPMENT_PLAN.md` for upgrade strategy and feature roadmap.
+Spark may release new versions over time. This project depends only on **public Spark headers** (e.g. `spark/scene/core/GameWorld.hpp`, `spark/scene/submit/SceneSubmit.hpp`, `spark/scene/material/GltfMaterial.hpp`) and `SPARK_ROOT` — not engine internals. See `DEVELOPMENT_PLAN.md` for upgrade strategy and feature roadmap.
 
 ## Player character
 

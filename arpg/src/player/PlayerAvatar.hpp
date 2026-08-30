@@ -5,7 +5,7 @@
 #include "spark/math/Quaternion.hpp"
 #include "spark/core/Utf8String.hpp"
 #include "spark/math/Vector3.hpp"
-#include "spark/scene/CharacterCameraRig.hpp"
+#include "spark/scene/camera/CharacterCameraRig.hpp"
 
 namespace Spark {
 class GameObject;

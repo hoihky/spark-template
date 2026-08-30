@@ -19,6 +19,7 @@ private:
     void UpdateHud(const Spark::FrameTiming& timing);
 
     Spark::Array<Spark::GameObject*> levelRoots{};
+    Spark::GameObject* skyRoot_ = nullptr;
     PlayerAvatarResult player{};
     PlayerController playerController{};
     float fpsSmoothed = 0.0F;
