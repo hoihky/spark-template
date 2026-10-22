@@ -19,12 +19,8 @@ CMakeUserPresets.json
 # Clangd / tooling (prefer compile_commands.json inside ignored build trees)
 compile_commands.json
 
-# --- CLion / IntelliJ IDEA ---
-.idea/workspace.xml
-.idea/httpRequests/
-.idea/dataSources/
-.idea/dataSources.local.xml
-.idea/shelf/
+# --- CLion / IntelliJ IDEA (local paths, CMake cache refs) ---
+.idea/
 
 # --- VS Code (optional local editor settings) ---
 .vscode/

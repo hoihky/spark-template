@@ -5,9 +5,9 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Spark engine repo (sibling of spark-template by default: spark-template/arpg → ../../spark).
+# Spark engine repo (sibling of spark-template: spark-template/C++/arpg → ../../../spark).
 if(NOT DEFINED SPARK_ROOT OR SPARK_ROOT STREQUAL "")
-    set(SPARK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../spark" CACHE PATH
+    set(SPARK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../spark" CACHE PATH
             "Path to the Spark engine repository (directory containing Spark's top-level CMakeLists.txt)")
 endif()
 
@@ -23,6 +23,9 @@ set(SPARK_BUILD_ENGINE_SHARED ON CACHE BOOL "Build SparkEngine as a shared libra
 set(SPARK_BUILD_ENGINE_DEMOS ON CACHE BOOL "Demo sources required by Spark::Engine shell" FORCE)
 set(SPARK_BUILD_DEMO OFF CACHE BOOL "Build SparkDemo (engine sample executable)" FORCE)
 set(SPARK_BUILD_INTEROP OFF CACHE BOOL "Build SparkInterop (C# bindings)" FORCE)
+set(SPARK_BUILD_GAMEPLAY ON CACHE BOOL "SparkGameplay kit (required when linking shared SparkEngine)" FORCE)
+# Draco install rules use list(TRANSFORM REPLACE) on source paths as regex; paths with "C++" fail configure.
+set(DRACO_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory("${SPARK_ROOT_ABS}" "${CMAKE_BINARY_DIR}/spark_engine")
 
 set(ARPG_SOURCES
@@ -40,7 +43,7 @@ set(ARPG_SOURCES
 
 add_executable(${PROJECT_NAME} ${ARPG_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_LIST_DIR}/src")
-target_link_libraries(${PROJECT_NAME} PRIVATE SparkEngine)
+target_link_libraries(${PROJECT_NAME} PRIVATE SparkEngine SparkGameplay)
 
 set(_spark_out "${CMAKE_BINARY_DIR}/spark_engine")
 if(APPLE OR UNIX)

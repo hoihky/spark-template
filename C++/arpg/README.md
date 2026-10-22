@@ -24,19 +24,21 @@ arpg/
 1. **File → Open** → select this `arpg` folder.
 2. Enable **Load CMake presets from CMakePresets.json** (Settings → CMake).
 3. Select the **debug** profile; build directory: `cmake-build-debug`.
-4. If Spark is not at `../../spark`, set cache variable `SPARK_ROOT` to your engine clone.
+4. If Spark is not at `../../../spark` (sibling of `spark-template`), set cache variable `SPARK_ROOT` to your engine clone.
 5. **Build** target `SparkArpg`, then **Run**.
+
+**CMake reload errors:** If you see *generator does not match* (Ninja vs Unix Makefiles), delete the local build tree and reload: `rm -rf cmake-build-debug`. Use the **debug** preset (Ninja) consistently; do not mix generators in the same `binaryDir`.
 
 Requires **CMake 3.28+**, **C++23**, and the **Vulkan SDK** (`glslangValidator` on `PATH` when Spark is first configured).
 
-CMake sets `SPARK_BUILD_DEMO=OFF` and `SPARK_BUILD_INTEROP=OFF` so only `SparkArpg` and shared `SparkEngine` are built. `SPARK_BUILD_ENGINE_DEMOS=ON` is required because current Spark links demo shell symbols into `SparkEngine`.
+CMake sets `SPARK_BUILD_DEMO=OFF` and `SPARK_BUILD_INTEROP=OFF` so only `SparkArpg` and shared `SparkEngine` are built. `SPARK_BUILD_ENGINE_DEMOS=ON` is required because current Spark links demo shell symbols into `SparkEngine`. `SPARK_BUILD_GAMEPLAY=ON` and linking `SparkGameplay` are required for shared `SparkEngine` (2D combat symbols used by engine ECS).
 
-Game assets are resolved at runtime from `<executable>/assets` (copied on each build). No compile-time absolute asset paths.
+Kenney **game** assets are resolved at runtime from `<executable>/assets` (copied on each build); paths are not baked into this template’s sources. Fox/sky/UI still use Spark’s generated `SPARK_*` path macros from the engine build (set `SPARK_ROOT` when configuring).
 
 ## Configure manually
 
 ```bash
-cmake -S . -B cmake-build-debug -DSPARK_ROOT=../../spark
+cmake -S . -B cmake-build-debug -DSPARK_ROOT=../../../spark
 cmake --build cmake-build-debug
 ```
 

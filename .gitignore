@@ -3,7 +3,7 @@
 .AppleDouble
 .LSOverride
 
-# Spark ARPG game project (see arpg/.gitignore for CMake / CLion details)
-arpg/cmake-build-*/
-arpg/build/
-arpg/out/
+# C++ Spark templates (see C++/arpg/.gitignore)
+C++/arpg/cmake-build-*/
+C++/arpg/build/
+C++/arpg/out/
