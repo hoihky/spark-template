@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/GameContext.hpp"
+#include "world/DungeonRoomBounds.hpp"
 #include "spark/core/Array.hpp"
 #include "spark/math/Vector3.hpp"
 
@@ -15,6 +16,7 @@ struct DungeonBuildResult {
     Spark::Vector3 playerSpawn{0.0F, 0.0F, 0.0F};
     /** Sky sphere root — center follows the camera each frame in PlayState. */
     Spark::GameObject* skyRoot = nullptr;
+    DungeonRoomBounds roomBounds{};
 };
 
 /**

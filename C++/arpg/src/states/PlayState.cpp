@@ -1,5 +1,6 @@
 #include "states/PlayState.hpp"
 
+#include "player/DungeonRoomCamera.hpp"
 #include "services/UiBootstrap.hpp"
 #include "world/DungeonLevelBuilder.hpp"
 #include "spark/engine/IEngineContext.hpp"
@@ -27,6 +28,7 @@ void PlayState::OnEnter(GameContext& ctx) {
 
     PlayerAvatar avatarFactory;
     player = avatarFactory.Spawn(ctx, levelRoots, level.playerSpawn);
+    roomBounds_ = level.roomBounds;
     skyRoot_ = level.skyRoot;
 
     glfwSetWindowTitle(ctx.engine->GetWindow().Handle(), "Spark ARPG template");
@@ -69,11 +71,11 @@ void PlayState::UpdateHud(const Spark::FrameTiming& timing) {
 
 void PlayState::OnUpdate(GameContext& ctx, const Spark::FrameTiming& timing) {
     ctx.sceneTimeSeconds = timing.totalTimeSeconds;
-    playerController.Update(player, ctx, timing);
+    playerController.Update(player, ctx, timing, roomBounds_);
 
     if (skyRoot_ != nullptr) {
         if (Spark::TransformComponent* skyTr = skyRoot_->GetComponent<Spark::TransformComponent>()) {
-            skyTr->SetTranslation(player.rig.CameraWorldPosition());
+            skyTr->SetTranslation(CameraWorldPositionInRoom(player.rig, roomBounds_));
             skyTr->SetUniformScale(72.0F);
         }
     }
@@ -91,9 +93,9 @@ void PlayState::OnRender(GameContext& ctx) {
 
     const Spark::Matrix4 proj =
             Spark::Matrix4::PerspectiveVulkan(Spark::DegreesToRadians(70.0F), aspect, 0.1F, 200.0F);
-    const Spark::Matrix4 view = player.rig.ViewMatrix();
+    const Spark::Matrix4 view = ViewMatrixInRoom(player.rig, roomBounds_);
     const Spark::Matrix4 viewProj = proj * view;
-    const Spark::Vector3 camPos = player.rig.CameraWorldPosition();
+    const Spark::Vector3 camPos = CameraWorldPositionInRoom(player.rig, roomBounds_);
 
     Spark::Vector3 pr = Spark::Vector3::Cross(Spark::Vector3{0.0F, 1.0F, 0.0F}, player.rig.ForwardWorld()).Normalized();
     if (pr.LengthSquared() < 1.0e-8F) {

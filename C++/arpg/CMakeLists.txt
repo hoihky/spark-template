@@ -36,7 +36,9 @@ set(ARPG_SOURCES
         src/services/AssetRegistry.cpp
         src/services/UiBootstrap.cpp
         src/world/DungeonLevelBuilder.cpp
+        src/world/DungeonRoomBounds.cpp
         src/player/PlayerAvatar.cpp
+        src/player/DungeonRoomCamera.cpp
         src/player/PlayerController.cpp
         src/states/PlayState.cpp
 )

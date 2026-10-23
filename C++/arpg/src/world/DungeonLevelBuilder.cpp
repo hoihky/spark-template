@@ -1,5 +1,7 @@
 #include "world/DungeonLevelBuilder.hpp"
 
+#include "world/DungeonRoomBounds.hpp"
+
 #include "spark/ecs/GameObject.hpp"
 #include "spark/scene/core/GameWorld.hpp"
 
@@ -381,6 +383,7 @@ DungeonBuildResult DungeonLevelBuilder::Build(GameContext& ctx) {
 
     result.playerSpawn = center;
     result.playerSpawn.y = 0.02F;
+    result.roomBounds = DungeonRoomBounds::ForGrid(kGridWidth, kGridDepth, kCellSize, kGroundY);
     return result;
 }
 

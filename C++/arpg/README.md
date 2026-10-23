@@ -76,6 +76,10 @@ Hero mesh: Spark engine **Fox.glb** (`assets/models/Fox.glb` in the Spark repo, 
 
 The dungeon is a **11×11** tile grid (~**22×22 m**) with perimeter walls and a handful of props. Props are snapped so each mesh’s lowest point rests on the floor.
 
+## Version control
+
+`CMakeLists.txt` and `CMakePresets.json` use relative `SPARK_ROOT` defaults only. Do not commit `cmake-build-*`, `.idea/`, or `CMakeUserPresets.json` (see `.gitignore`) — they contain machine-specific absolute paths.
+
 ## Further reading
 
 - Spark engine: `SPARK_ROOT/README.md` and `SPARK_ROOT/docs/`

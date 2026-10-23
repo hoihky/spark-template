@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <RootNamespace>SparkArpg</RootNamespace>
+    <NoWarn>$(NoWarn);CA2255</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../spark-sharp/scripting/Spark.Scripting/Spark.Scripting.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <ArpgAssetsSource>$(MSBuildThisFileDirectory)../../C++/arpg/assets</ArpgAssetsSource>
+  </PropertyGroup>
+  <Target Name="CopyArpgAssets" AfterTargets="Build">
+    <ItemGroup>
+      <ArpgAssetFiles Include="$(ArpgAssetsSource)/**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ArpgAssetFiles)"
+          DestinationFiles="@(ArpgAssetFiles->'$(OutputPath)assets/%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>

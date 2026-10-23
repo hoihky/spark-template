@@ -3,6 +3,7 @@
 #include "core/IGameState.hpp"
 #include "player/PlayerAvatar.hpp"
 #include "player/PlayerController.hpp"
+#include "world/DungeonRoomBounds.hpp"
 #include "spark/core/Array.hpp"
 
 namespace Arpg {
@@ -22,6 +23,7 @@ private:
     Spark::GameObject* skyRoot_ = nullptr;
     PlayerAvatarResult player{};
     PlayerController playerController{};
+    DungeonRoomBounds roomBounds_{};
     float fpsSmoothed = 0.0F;
 };
 

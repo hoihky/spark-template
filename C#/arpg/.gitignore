@@ -1,0 +1,12 @@
+# Build outputs (absolute paths in FileListAbsolute.txt, sourcelink.json, etc.)
+bin/
+obj/
+
+# Rider / ReSharper user settings (may reference local DLL paths)
+*.DotSettings.user
+
+# JetBrains IDE project metadata
+.idea/
+
+# VS Code (optional)
+.vscode/

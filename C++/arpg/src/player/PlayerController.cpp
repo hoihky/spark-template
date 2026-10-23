@@ -1,5 +1,7 @@
 #include "player/PlayerController.hpp"
 
+#include "player/DungeonRoomCamera.hpp"
+
 #include "spark/ecs/GameObject.hpp"
 #include "spark/ecs/components/animation/Character3DAnimFsmComponent.hpp"
 #include "spark/ecs/components/core/TransformComponent.hpp"
@@ -16,7 +18,8 @@ namespace Arpg {
 void PlayerController::Update(
         PlayerAvatarResult& player,
         GameContext& ctx,
-        const Spark::FrameTiming& timing) {
+        const Spark::FrameTiming& timing,
+        const DungeonRoomBounds& roomBounds) {
     Spark::IInput& in = ctx.engine->GetInput();
     Spark::CharacterCameraRig& rig = player.rig;
 
@@ -76,6 +79,8 @@ void PlayerController::Update(
     if (in.IsKeyPressedThisFrame(GLFW_KEY_F) && player.animFsm != nullptr) {
         player.animFsm->RequestAttack();
     }
+
+    ClampCharacterInsideRoom(rig, roomBounds);
 
     if (rootTr != nullptr) {
         rootTr->SetTranslation(rig.characterPosition);

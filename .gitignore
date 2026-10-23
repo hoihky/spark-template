@@ -7,3 +7,15 @@
 C++/arpg/cmake-build-*/
 C++/arpg/build/
 C++/arpg/out/
+
+# C# / .NET (machine-specific paths in obj/, NuGet cache refs, sourcelink)
+C#/arpg/bin/
+C#/arpg/obj/
+
+# IDE — local paths, assembly explorer, CMake cache refs (never commit)
+.idea/
+*.DotSettings.user
+.vscode/
+
+# Accidental dotnet config typo (e.g. `-c --release`)
+**/bin/--release/
