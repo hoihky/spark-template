@@ -1,7 +1,6 @@
 using Spark.Bindings;
 using Spark.Bindings.Components;
 using SparkArpg.Core;
-using SparkArpg.Interop;
 using SparkArpg.Services;
 
 namespace SparkArpg.World;
@@ -83,18 +82,17 @@ internal static class DungeonLevelBuilder
         TransformComponent tr = go.GetOrAddTransform();
         tr.Translation = new Vector3 { X = translation.X, Y = GroundY, Z = translation.Z };
         tr.SetUniformScale(uniformScale);
-        tr.SetRotation(ArpgMath.FromAxisAngleY(yawRadians));
+        tr.SetRotation(GameMath.FromAxisAngleY(yawRadians));
 
         Vector3 meshAlbedo = new() { X = 1, Y = 1, Z = 1 };
         MeshComponent mesh = go.AddMesh(SparkSceneMeshSlot.SparkSceneMeshSlot_Custom, meshAlbedo);
         mesh.SetMeshByKey(world, path);
 
         string atlasPath = Path.GetFullPath(ctx.Paths.ModelPath("dungeon_texture.png"));
-        ArpgSceneApi.ApplyGltfPropMaterial(
-            go,
+        go.ApplyGltfPropMaterial(
             world,
             path,
-            File.Exists(atlasPath) ? ArpgSceneApi.DungeonAtlasKey : null);
+            File.Exists(atlasPath) ? ArpgAssetKeys.DungeonAtlasKey : null);
 
         if (addWallCollider)
         {
@@ -115,9 +113,9 @@ internal static class DungeonLevelBuilder
     private static void SpawnPerimeterWalls(GameContext ctx, List<GameObject> roots, Vector3 corner00, Vector3 center)
     {
         float wallYawNorth = 0;
-        float wallYawEast = ArpgMath.HalfPi;
-        float wallYawSouth = ArpgMath.Pi;
-        float wallYawWest = -ArpgMath.HalfPi;
+        float wallYawEast = GameMath.HalfPi;
+        float wallYawSouth = GameMath.Pi;
+        float wallYawWest = -GameMath.HalfPi;
 
         for (int i = 0; i < GridWidth; i++)
         {
@@ -186,7 +184,7 @@ internal static class DungeonLevelBuilder
             roots,
             "pillar_decorated.gltf",
             new Vector3 { X = center.X + 3, Y = GroundY, Z = center.Z - 2 },
-            ArpgMath.HalfPi * 0.5f,
+            GameMath.HalfPi * 0.5f,
             1,
             true,
             "PillarB");
@@ -195,7 +193,7 @@ internal static class DungeonLevelBuilder
             roots,
             "chest.gltf",
             new Vector3 { X = center.X + 2.5f, Y = GroundY, Z = center.Z + 3 },
-            -ArpgMath.HalfPi,
+            -GameMath.HalfPi,
             1,
             false,
             "Chest");
@@ -204,7 +202,7 @@ internal static class DungeonLevelBuilder
             roots,
             "torch_mounted.gltf",
             new Vector3 { X = center.X - 4, Y = GroundY, Z = center.Z + 3.5f },
-            ArpgMath.HalfPi,
+            GameMath.HalfPi,
             1,
             false,
             "Torch");
@@ -222,7 +220,7 @@ internal static class DungeonLevelBuilder
             roots,
             "sword_shield.gltf",
             new Vector3 { X = center.X + 0.5f, Y = GroundY, Z = center.Z + 2 },
-            ArpgMath.HalfPi,
+            GameMath.HalfPi,
             0.85f,
             false,
             "SwordShieldProp");
@@ -248,7 +246,7 @@ internal static class DungeonLevelBuilder
     private static GameObject SpawnSkybox(GameContext ctx, List<GameObject> roots)
     {
         GameWorld world = ctx.World!;
-        ArpgSceneApi.RegisterSkySphereMesh(world);
+        world.RegisterSkySphereMesh(ArpgAssetKeys.SkyMeshKey);
 
         GameObject sky = world.CreateGameObject("Sky");
         sky.GetOrAddTransform().SetUniformScale(SkySphereScale);
@@ -257,10 +255,10 @@ internal static class DungeonLevelBuilder
         SkyComponent? skyComp = sky.GetSky();
         string skyTexPath = Path.GetFullPath(ctx.Paths.SkyTexturePath());
         bool haveSkyTex = File.Exists(skyTexPath)
-            && ArpgSceneApi.RegisterTextureFromFile(world, skyTexPath, ArpgSceneApi.SkyTextureKey);
+            && world.RegisterTextureFromFile(skyTexPath, ArpgAssetKeys.SkyTextureKey);
 
         MeshComponent skyMesh = sky.AddMesh(SparkSceneMeshSlot.SparkSceneMeshSlot_Custom, new Vector3 { X = 1, Y = 1, Z = 1 });
-        skyMesh.SetMeshByKey(world, ArpgSceneApi.SkyMeshKey);
+        skyMesh.SetMeshByKey(world, ArpgAssetKeys.SkyMeshKey);
 
         MaterialComponent? skyMat = sky.GetMaterial();
         if (skyMat is null)
@@ -269,7 +267,7 @@ internal static class DungeonLevelBuilder
             skyMat = sky.GetMaterial();
         }
 
-        if (haveSkyTex && skyMat is not null && skyMat.SetBaseColorTexture(world, ArpgSceneApi.SkyTextureKey))
+        if (haveSkyTex && skyMat is not null && skyMat.SetBaseColorTexture(world, ArpgAssetKeys.SkyTextureKey))
         {
             if (skyComp is not null)
             {
@@ -298,9 +296,9 @@ internal static class DungeonLevelBuilder
         GameWorld world = ctx.World!;
 
         GameObject sun = world.CreateGameObject("Sun");
-        Vector3 sunDir = ArpgMath.Normalized(new Vector3 { X = 0.35f, Y = 0.82f, Z = 0.28f });
+        Vector3 sunDir = GameMath.Normalized(new Vector3 { X = 0.35f, Y = 0.82f, Z = 0.28f });
         sun.GetOrAddTransform().SetRotation(
-            ArpgMath.FromShortestArc(new Vector3 { X = 0, Y = 0, Z = 1 }, sunDir));
+            GameMath.FromShortestArc(new Vector3 { X = 0, Y = 0, Z = 1 }, sunDir));
         sun.AddDirectionalLight(new Vector3 { X = 1.0f, Y = 0.96f, Z = 0.90f }, 1.05f);
         roots.Add(sun);
 

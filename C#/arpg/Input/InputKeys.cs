@@ -1,4 +1,4 @@
-namespace SparkArpg.Interop;
+namespace SparkArpg.Input;
 
 /// <summary>GLFW key codes (same as C++ template).</summary>
 internal static class InputKeys

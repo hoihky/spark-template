@@ -1,7 +1,7 @@
 using Spark.Bindings;
 using Spark.Bindings.Components;
 using SparkArpg.Core;
-using SparkArpg.Interop;
+using SparkArpg.Input;
 
 namespace SparkArpg.Player;
 
@@ -50,7 +50,14 @@ internal sealed class PlayerController
         {
             rootTr.Translation = rig.CharacterPosition;
             player.Controller.SetMoveInput(wishVel);
-            world.SimulateCharacterControllers3D(timing, gravityY: 0f, maxFallSpeed: 0f, broadPhaseCellSize: 4f);
+            world.SimulateCharacterControllers3D(
+                timing,
+                new CharacterController3DSettings
+                {
+                    GravityY = 0f,
+                    MaxFallSpeed = 0f,
+                    BroadPhaseCellSize = 4f,
+                });
             Vector3 resolved = rootTr.Translation;
             rig.CharacterPosition = new Vector3 { X = resolved.X, Y = rig.GroundY, Z = resolved.Z };
         }
@@ -90,9 +97,9 @@ internal sealed class PlayerController
         if (rootTr is not null)
         {
             rootTr.Translation = rig.CharacterPosition;
-            SparkQuaternion qYaw = ArpgMath.FromAxisAngleY(rig.CharacterVisualYaw + player.BindYawOffset);
+            SparkQuaternion qYaw = GameMath.FromAxisAngleY(rig.CharacterVisualYaw + player.BindYawOffset);
             SparkQuaternion rot = player.UseSkinnedAvatar
-                ? ArpgMath.Normalized(ArpgMath.Multiply(qYaw, player.BindFix))
+                ? GameMath.Normalized(GameMath.Multiply(qYaw, player.BindFix))
                 : qYaw;
             rootTr.SetRotation(rot);
         }

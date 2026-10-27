@@ -1,7 +1,6 @@
 using Spark.Bindings;
 using Spark.Bindings.Components;
 using SparkArpg.Core;
-using SparkArpg.Interop;
 using SparkArpg.Player;
 using SparkArpg.World;
 
@@ -73,14 +72,14 @@ internal sealed class PlayState : IGameState
         Vector3 camPos = _player.Rig.CameraWorldPosition();
 
         Vector3 forward = _player.Rig.ForwardWorld();
-        Vector3 pr = ArpgMath.Normalized(ArpgMath.Cross(new Vector3 { X = 0, Y = 1, Z = 0 }, forward));
-        if (ArpgMath.LengthSquared(pr) < 1.0e-8f)
+        Vector3 pr = GameMath.Normalized(GameMath.Cross(new Vector3 { X = 0, Y = 1, Z = 0 }, forward));
+        if (GameMath.LengthSquared(pr) < 1.0e-8f)
         {
-            pr = ArpgMath.Normalized(ArpgMath.Cross(new Vector3 { X = 1, Y = 0, Z = 0 }, forward));
+            pr = GameMath.Normalized(GameMath.Cross(new Vector3 { X = 1, Y = 0, Z = 0 }, forward));
         }
 
-        Vector3 pu = ArpgMath.Normalized(ArpgMath.Cross(forward, pr));
-        Vector3 sunDir = ArpgMath.Normalized(new Vector3 { X = 0.35f, Y = 0.82f, Z = 0.28f });
+        Vector3 pu = GameMath.Normalized(GameMath.Cross(forward, pr));
+        Vector3 sunDir = GameMath.Normalized(new Vector3 { X = 0.35f, Y = 0.82f, Z = 0.28f });
 
         ctx.World!.SubmitStandardLit(
             engine,

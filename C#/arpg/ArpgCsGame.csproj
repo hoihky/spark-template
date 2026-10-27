@@ -4,7 +4,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RootNamespace>SparkArpg</RootNamespace>
     <NoWarn>$(NoWarn);CA2255</NoWarn>

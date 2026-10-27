@@ -1,7 +1,6 @@
 using Spark.Bindings;
 using Spark.Bindings.Components;
 using SparkArpg.Core;
-using SparkArpg.Interop;
 
 namespace SparkArpg.Player;
 
@@ -37,13 +36,17 @@ internal static class PlayerAvatar
             avatarPath = Path.GetFullPath(ctx.Paths.SparkEngineModelPath("CesiumMan.glb"));
         }
 
-        world.EnsureSkinnedGltfLoaded(avatarPath);
+        world.LoadSkinnedGltf(avatarPath);
         float uniformScale = 0.04f;
         SparkQuaternion bindFix = new() { w = 1 };
         float bindYaw = 0;
         float fittedHeight = TargetHeightM;
-        if (ArpgSceneApi.TryMeasureSkinnedAvatar(world, avatarPath, TargetHeightM, out uniformScale, out bindFix, out bindYaw, out fittedHeight))
+        if (world.TryMeasureSkinnedGltfAvatar(avatarPath, TargetHeightM, out SkinnedGltfAvatarLayout layout))
         {
+            uniformScale = layout.UniformScale;
+            bindFix = layout.BindFix.ToNative();
+            bindYaw = layout.FacingYawOffset;
+            fittedHeight = layout.FittedHeightMeters;
             TuneThirdPersonRig(result.Rig, fittedHeight);
         }
         else
@@ -53,13 +56,18 @@ internal static class PlayerAvatar
 
         if (usedFox)
         {
-            bindYaw = -ArpgMath.HalfPi;
+            bindYaw = -GameMath.HalfPi;
         }
 
         GameObject root = world.CreateGameObject("Player");
         root.GetOrAddTransform().Translation = spawnPosition;
 
-        root.TryAddSkinnedCharacterFromGltf(world, avatarPath);
+        _ = root.TryAddSkinnedCharacterFromGltf(
+            world,
+            avatarPath,
+            out SkinnedMeshComponent? _,
+            out AnimatorComponent? _,
+            out MaterialComponent? _);
         root.GetOrAddTransform().SetUniformScale(uniformScale);
 
         // C++ keeps the capsule on an unscaled root and scales only the visual child. With skinned mesh on the

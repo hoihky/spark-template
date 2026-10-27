@@ -1,5 +1,4 @@
 using Spark.Bindings;
-using SparkArpg.Interop;
 
 namespace SparkArpg.Services;
 
@@ -12,8 +11,8 @@ internal sealed class AssetRegistry
         string atlasPath = Path.GetFullPath(paths.ModelPath("dungeon_texture.png"));
         if (File.Exists(atlasPath))
         {
-            world.EnsureTextureLoaded(atlasPath);
-            ArpgSceneApi.RegisterTextureFromFile(world, atlasPath, ArpgSceneApi.DungeonAtlasKey);
+            world.LoadTexture(atlasPath);
+            world.RegisterTextureFromFile(atlasPath, ArpgAssetKeys.DungeonAtlasKey);
         }
     }
 
@@ -25,7 +24,7 @@ internal sealed class AssetRegistry
             return true;
         }
 
-        if (!world.EnsureGltfLoaded(full))
+        if (!world.LoadGltf(full))
         {
             return false;
         }

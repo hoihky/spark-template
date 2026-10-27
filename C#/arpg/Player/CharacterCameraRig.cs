@@ -1,5 +1,5 @@
 using Spark.Bindings;
-using SparkArpg.Interop;
+using SparkArpg.Input;
 using SparkArpg.World;
 
 namespace SparkArpg.Player;
@@ -45,12 +45,12 @@ internal sealed class CharacterCameraRig
         float dy = deltaX * MouseSensitivity * 0.01f;
         if (Mode == CharacterCameraMode.ThirdPerson)
         {
-            CameraYaw = ArpgMath.WrapAnglePi(CameraYaw + dy);
-            CharacterVisualYaw = ArpgMath.WrapAnglePi(CharacterVisualYaw + dy);
+            CameraYaw = GameMath.WrapAnglePi(CameraYaw + dy);
+            CharacterVisualYaw = GameMath.WrapAnglePi(CharacterVisualYaw + dy);
         }
         else
         {
-            CameraYaw = ArpgMath.WrapAnglePi(CameraYaw + dy);
+            CameraYaw = GameMath.WrapAnglePi(CameraYaw + dy);
         }
 
         CameraPitch -= deltaY * MouseSensitivity * 0.01f;
@@ -78,11 +78,11 @@ internal sealed class CharacterCameraRig
                 move = new Vector3 { X = move.X - flatF.X, Y = move.Y - flatF.Y, Z = move.Z - flatF.Z };
             }
 
-            if (ArpgMath.LengthSquared(move) > ArpgMath.Epsilon)
+            if (GameMath.LengthSquared(move) > GameMath.Epsilon)
             {
                 bool sprint = input.IsKeyDown(InputKeys.LeftShift) || input.IsKeyDown(InputKeys.RightShift);
                 float speed = (sprint ? RunSpeed : MoveSpeed) * deltaSeconds;
-                move = ArpgMath.Normalized(move);
+                move = GameMath.Normalized(move);
                 move = new Vector3 { X = move.X * speed, Y = move.Y * speed, Z = move.Z * speed };
                 CharacterPosition = new Vector3
                 {
@@ -99,14 +99,14 @@ internal sealed class CharacterCameraRig
         float sy = MathF.Sin(CameraYaw);
         float cy = MathF.Cos(CameraYaw);
         Vector3 flatFwd = new() { X = sy, Y = 0, Z = -cy };
-        Vector3 flatR = ArpgMath.Cross(flatFwd, new Vector3 { X = 0, Y = 1, Z = 0 });
-        if (ArpgMath.LengthSquared(flatR) < ArpgMath.Epsilon)
+        Vector3 flatR = GameMath.Cross(flatFwd, new Vector3 { X = 0, Y = 1, Z = 0 });
+        if (GameMath.LengthSquared(flatR) < GameMath.Epsilon)
         {
             flatR = new Vector3 { X = 1, Y = 0, Z = 0 };
         }
         else
         {
-            flatR = ArpgMath.Normalized(flatR);
+            flatR = GameMath.Normalized(flatR);
         }
 
         Vector3 moveFp = default;
@@ -130,11 +130,11 @@ internal sealed class CharacterCameraRig
             moveFp = new Vector3 { X = moveFp.X - flatR.X, Y = moveFp.Y - flatR.Y, Z = moveFp.Z - flatR.Z };
         }
 
-        if (ArpgMath.LengthSquared(moveFp) > ArpgMath.Epsilon)
+        if (GameMath.LengthSquared(moveFp) > GameMath.Epsilon)
         {
             bool sprint = input.IsKeyDown(InputKeys.LeftShift) || input.IsKeyDown(InputKeys.RightShift);
             float speed = (sprint ? RunSpeed : MoveSpeed) * deltaSeconds;
-            moveFp = ArpgMath.Normalized(moveFp);
+            moveFp = GameMath.Normalized(moveFp);
             moveFp = new Vector3 { X = moveFp.X * speed, Y = moveFp.Y * speed, Z = moveFp.Z * speed };
             CharacterPosition = new Vector3
             {
@@ -154,7 +154,7 @@ internal sealed class CharacterCameraRig
         float syy = MathF.Sin(CameraYaw);
         float cp = MathF.Cos(CameraPitch);
         float sp = MathF.Sin(CameraPitch);
-        return ArpgMath.Normalized(new Vector3 { X = syy * cp, Y = sp, Z = -cyy * cp });
+        return GameMath.Normalized(new Vector3 { X = syy * cp, Y = sp, Z = -cyy * cp });
     }
 
     public Vector3 FirstPersonEyeWorld()
@@ -162,13 +162,13 @@ internal sealed class CharacterCameraRig
         float sy = MathF.Sin(CameraYaw);
         float cy = MathF.Cos(CameraYaw);
         Vector3 flatFwd = new() { X = sy, Y = 0, Z = -cy };
-        if (ArpgMath.LengthSquared(flatFwd) < ArpgMath.Epsilon)
+        if (GameMath.LengthSquared(flatFwd) < GameMath.Epsilon)
         {
             flatFwd = new Vector3 { X = 0, Y = 0, Z = -1 };
         }
         else
         {
-            flatFwd = ArpgMath.Normalized(flatFwd);
+            flatFwd = GameMath.Normalized(flatFwd);
         }
 
         return new Vector3
@@ -212,12 +212,12 @@ internal sealed class CharacterCameraRig
             Vector3 eye = FirstPersonEyeWorld();
             Vector3 f = ForwardWorld();
             Vector3 worldUp = new() { X = 0, Y = 1, Z = 0 };
-            if (MathF.Abs(ArpgMath.Dot(f, worldUp)) > 0.92f)
+            if (MathF.Abs(GameMath.Dot(f, worldUp)) > 0.92f)
             {
                 worldUp = new Vector3 { X = 0, Y = 0, Z = 1 };
             }
 
-            return ArpgMath.LookAt(eye, new Vector3 { X = eye.X + f.X, Y = eye.Y + f.Y, Z = eye.Z + f.Z }, worldUp);
+            return GameMath.LookAt(eye, new Vector3 { X = eye.X + f.X, Y = eye.Y + f.Y, Z = eye.Z + f.Z }, worldUp);
         }
 
         Vector3 pivot = ThirdPersonPivot();
@@ -230,18 +230,18 @@ internal sealed class CharacterCameraRig
         };
         Vector3 cam = CameraWorldPosition();
         Vector3 worldUpTp = new() { X = 0, Y = 1, Z = 0 };
-        Vector3 toFocus = ArpgMath.Normalized(new Vector3
+        Vector3 toFocus = GameMath.Normalized(new Vector3
         {
             X = focus.X - cam.X,
             Y = focus.Y - cam.Y,
             Z = focus.Z - cam.Z,
         });
-        if (MathF.Abs(ArpgMath.Dot(toFocus, worldUpTp)) > 0.96f)
+        if (MathF.Abs(GameMath.Dot(toFocus, worldUpTp)) > 0.96f)
         {
             worldUpTp = new Vector3 { X = 0, Y = 0, Z = 1 };
         }
 
-        return ArpgMath.LookAt(cam, focus, worldUpTp);
+        return GameMath.LookAt(cam, focus, worldUpTp);
     }
 
     private Vector3 ThirdPersonPivot() => new()
@@ -268,10 +268,10 @@ internal sealed class CharacterCameraRig
 
     private Vector3 ThirdPersonFlatForward()
     {
-        float yaw = ArpgMath.WrapAnglePi(CharacterVisualYaw + CharacterFacingYawOffset);
-        SparkQuaternion qYaw = ArpgMath.FromAxisAngleY(yaw);
-        SparkQuaternion qTotal = ArpgMath.Normalized(ArpgMath.Multiply(qYaw, CharacterRootBindOrientation));
-        Vector3 f = ArpgMath.RotateVector(qTotal, CharacterLocalForward);
+        float yaw = GameMath.WrapAnglePi(CharacterVisualYaw + CharacterFacingYawOffset);
+        SparkQuaternion qYaw = GameMath.FromAxisAngleY(yaw);
+        SparkQuaternion qTotal = GameMath.Normalized(GameMath.Multiply(qYaw, CharacterRootBindOrientation));
+        Vector3 f = GameMath.RotateVector(qTotal, CharacterLocalForward);
         float hx = f.X;
         float hz = f.Z;
         float hLen2 = hx * hx + hz * hz;

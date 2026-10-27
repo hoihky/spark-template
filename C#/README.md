@@ -61,10 +61,10 @@ If you see `load_assembly_and_get_function_pointer failed: -2147024894` (`0x8007
 | Area | C# behavior |
 |------|-------------|
 | Third-person camera | `CharacterCameraRig` ported in C# (same math as `Spark::CharacterCameraRig`) |
-| Character controller walls | Uses `spark_character_controller3_d_set_move_input` + `spark_world_simulate_character_controllers_3d` (rebuild `SparkInterop`) |
-| Player visual hierarchy | No `SetParent` — Fox/skinned mesh lives on the player root via `spark_object_add_skinned_character_from_gltf` |
-| Sky mesh | No `Mesh::CreateSkySphere` binding — sky uses `SkyComponent` + tint; HDR equirect when `SetBaseColorTexture` succeeds |
-| ESC quit | `spark_context_request_window_close` on `IEngineContext` (via `RequestWindowClose()` extension) |
+| Character controller walls | `CharacterController3DComponent.SetMoveInput` + `GameWorld.SimulateCharacterControllers3D` (`Spark.Bindings`) |
+| Player visual hierarchy | No `SetParent` — Fox/skinned mesh on the player root via `GameObject.TryAddSkinnedCharacterFromGltf` |
+| Sky mesh | `GameWorld.RegisterSkySphereMesh` + `SkyComponent`; HDR equirect when `MaterialComponent.SetBaseColorTexture` succeeds |
+| ESC quit | `IEngineContext.RequestWindowClose()` |
 
 Controls match the C++ template: WASD, Shift run, F attack, F1 capture mouse.
 

@@ -1,8 +1,9 @@
 using Spark.Bindings;
 
-namespace SparkArpg.Interop;
+namespace SparkArpg;
 
-internal static class ArpgMath
+/// <summary>Small math helpers for the ARPG sample (not part of Spark.Bindings).</summary>
+internal static class GameMath
 {
     public static SparkQuaternion Identity => new() { w = 1 };
     public const float Pi = MathF.PI;
@@ -45,7 +46,6 @@ internal static class ArpgMath
         };
     }
 
-    /// <summary>Column-major view matrix (matches Spark::Matrix4::LookAt).</summary>
     public static Matrix4 LookAt(in Vector3 eye, in Vector3 target, in Vector3 up)
     {
         Vector3 f = Normalized(new Vector3
