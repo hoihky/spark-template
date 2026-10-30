@@ -1,5 +1,15 @@
 # Spark template — C# (spark-sharp)
 
+## Layout
+
+| Path | Purpose |
+|------|---------|
+| [`C#/SparkDemoFoundation`](SparkDemoFoundation/) | Shared fly camera, HUD, standard-lit submit, asset paths |
+| [`C#/Basic3D`](Basic3D/), [`C#/Sky`](Sky/), … | One folder per Spark **shell demo** (see [`DEMO_CATALOG.md`](DEMO_CATALOG.md)) |
+| [`C#/arpg`](arpg/) | Full game template (Kenney dungeon ARPG), not a shell demo |
+
+Run any demo: `./C#/tools/run-cs-demo.sh Basic3D` (requires `SPARK_ENGINE_ROOT`).
+
 `C#/arpg` is a C# port of the Kenney dungeon ARPG in `C++/arpg`, built on [spark-sharp](https://github.com/your-org/spark-sharp) (`Spark.Scripting` + generated `Spark.Bindings`). No custom native interop sources are required beyond what spark-sharp already ships.
 
 ## Prerequisites
